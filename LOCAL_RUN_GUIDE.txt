@@ -1,0 +1,58 @@
+# DeepHeal - Local Execution Guide
+
+Since Render requires a card for their free tier, you can run the entire DeepHeal system (Frontend + Backend) 100% locally on your machine.
+
+---
+
+## 1. PREREQUISITES
+* Python 3.12 or 3.13 installed.
+* Flutter and Dart SDKs installed.
+* An Android Emulator, iOS Simulator, or a physical phone connected.
+
+---
+
+## 2. RUNNING THE BACKEND (Server)
+1.  Open a terminal.
+2.  Navigate to the backend directory:
+    ```bash
+    cd backend
+    ```
+3.  Install the required dependencies:
+    ```bash
+    py -m pip install -r requirements.txt
+    ```
+4.  Start the FastAPI server:
+    ```bash
+    py -m app.main
+    ```
+    * The server will be live at: http://127.0.0.1:8000
+    * Interactive Documentation: http://127.0.0.1:8000/docs
+
+---
+
+## 3. RUNNING THE FRONTEND (Flutter App)
+1.  Open a SECOND terminal (keep the backend terminal running!).
+2.  Go to the root project folder.
+3.  Fetch the new dependencies (http package):
+    ```bash
+    flutter pub get
+    ```
+4.  **CRITICAL STEP**: Check your API Settings.
+    * Open: `lib/core/constants/api_constants.dart`
+    * If using **Android Emulator**: Change `baseUrl` to `http://10.0.2.2:8000`.
+    * If using **iOS/Real Phone**: Use your computer's local IP (e.g., `http://192.168.1.5:8000`).
+5.  Start the app:
+    ```bash
+    flutter run
+    ```
+
+---
+
+## 4. TROUBLESHOOTING
+*   **"Connection Refused"**: Ensure the backend terminal is actually showing "Application startup complete".
+*   **Emulator Issues**: Emulators cannot see "localhost". Always use `10.0.2.2` for Android or your real IP address.
+*   **Port 8000 Busy**: If the port is used, change it in `backend/.env` and also update `api_constants.dart`.
+
+---
+
+Your chatbot is now running privately and for free on your own local hardware!

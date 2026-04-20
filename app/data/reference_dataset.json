@@ -1,0 +1,21 @@
+[
+  {
+    "source": "CounselChat",
+    "context": "User expressing severe workplace anxiety",
+    "professional_response_type": "Cognitive Reframing",
+    "sample_input": "I feel like I'm going to fail my performance review even though I worked hard.",
+    "label": "anxiety"
+  },
+  {
+    "source": "GoEmotions",
+    "context": "Social sentiment detection",
+    "sample_input": "I am so tired of everything going wrong today.",
+    "label": "fatigue"
+  },
+  {
+    "source": "MentalDistress",
+    "context": "Crisis screening",
+    "sample_input": "Everything feels hopeless and I can't find a reason to get up.",
+    "label": "sadness"
+  }
+]

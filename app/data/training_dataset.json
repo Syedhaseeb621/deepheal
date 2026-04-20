@@ -1,0 +1,34 @@
+[
+  {
+    "text": "I feel so stressed with work and deadlines.",
+    "label": "stress"
+  },
+  {
+    "text": "I can't stop worrying about what might happen tomorrow.",
+    "label": "anxiety"
+  },
+  {
+    "text": "Everything feels hopeless and I just want to stay in bed.",
+    "label": "sadness"
+  },
+  {
+    "text": "I'm so angry at my boss for being so unfair.",
+    "label": "anger"
+  },
+  {
+    "text": "I have no energy left to do anything today.",
+    "label": "fatigue"
+  },
+  {
+    "text": "My heart is racing and I feel like I can't breathe.",
+    "label": "anxiety"
+  },
+  {
+    "text": "I just feel like crying all the time lately.",
+    "label": "sadness"
+  },
+  {
+    "text": "Too many tasks, not enough time, it's overwhelming.",
+    "label": "stress"
+  }
+]

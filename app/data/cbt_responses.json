@@ -1,0 +1,42 @@
+{
+  "stress": {
+    "response": "It sounds like you're under a lot of pressure right now. I want you to know that it's okay to feel this way.",
+    "suggestion": "Try the 4-7-8 breathing technique: inhale for 4 seconds, hold for 7, and exhale for 8. It can help calm your nervous system.",
+    "reflection": "What is one small thing you can control in your environment right now?"
+  },
+  "sadness": {
+    "response": "I'm sorry to hear you're feeling down. It's important to give yourself permission to feel these emotions without judgment.",
+    "suggestion": "Consider writing down three small things you're grateful for today, even if they seem insignificant.",
+    "reflection": "If you were talking to a friend who felt this way, what kind words would you say to them?"
+  },
+  "anxiety": {
+    "response": "Anxiety can feel like a heavy weight. Let's try to ground ourselves in the present moment.",
+    "suggestion": "Try the 5-4-3-2-1 grounding exercise: Name 5 things you see, 4 things you can touch, 3 things you hear, 2 you can smell, and 1 you can taste.",
+    "reflection": "Is there a specific thought that's fueling this feeling, and is there any evidence that contradicts it?"
+  },
+  "anger": {
+    "response": "I hear that you're feeling a lot of frustration. Anger is often a signal that something feels unfair or overwhelming.",
+    "suggestion": "Try a short 'venting' write-up—set a timer for 2 minutes and write everything you're feeling without censoring yourself, then discard it.",
+    "reflection": "What need is your anger trying to protect right now?"
+  },
+  "fatigue": {
+    "response": "It sounds like you're completely drained. Fatigue can affect every part of your well-being.",
+    "suggestion": "Prioritize one essential task and let the rest wait. A short 15-minute power nap or a walk in fresh air might also help.",
+    "reflection": "How long have you been pushing yourself without a break?"
+  },
+  "loneliness": {
+    "response": "Feeling alone is a very difficult experience. It's human to crave connection.",
+    "suggestion": "Try reaching out to one person today, even just for a quick text, or visit a public space like a library or cafe to be around others.",
+    "reflection": "What are some ways you have felt connected to others in the past?"
+  },
+  "guilt": {
+    "response": "Guilt can be a very heavy burden to carry. It's often linked to our values and things we care about.",
+    "suggestion": "Try to distinguish between things you can control and things you can't. Writing a letter of apology (even if you don't send it) can help.",
+    "reflection": "Are you holding yourself to an impossible standard right now?"
+  },
+  "default": {
+    "response": "I'm here to listen and support you. Sometimes just sharing how you feel is the first step.",
+    "suggestion": "Try taking a few slow, deep breaths and see if you can identify where in your body you feel this most.",
+    "reflection": "Can you tell me more about what's on your mind?"
+  }
+}

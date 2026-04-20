@@ -39,6 +39,10 @@ class EmotionHistoryNotifier extends Notifier<List<EmotionResult>> {
   }
 }
 
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import '../constants/api_constants.dart';
+
 // Chat Provider
 final chatProvider = NotifierProvider<ChatNotifier, List<ChatMessage>>(() {
   return ChatNotifier();
@@ -48,7 +52,7 @@ class ChatNotifier extends Notifier<List<ChatMessage>> {
   @override
   List<ChatMessage> build() => MockData.initialMessages;
 
-  void sendMessage(String text) {
+  Future<void> sendMessage(String text) async {
     final userMsg = ChatMessage(
       id: DateTime.now().toString(),
       text: text,
@@ -57,20 +61,56 @@ class ChatNotifier extends Notifier<List<ChatMessage>> {
     );
     state = [...state, userMsg];
     
-    // Simulate AI Reply
-    _simulateAIReply();
+    // Call real Backend API
+    await _getAIResponse(text);
   }
 
-  void _simulateAIReply() async {
-    await Future.delayed(const Duration(seconds: 1));
-    final aiMsg = ChatMessage(
-      id: DateTime.now().toString(),
-      text: "Thank you for sharing that. It sounds like you're reflecting on your day. Would you like to explore these feelings more or try a calming exercise?",
-      isUser: false,
-      timestamp: DateTime.now(),
-      suggestions: ["Explore Feelings", "Breathing Exercise", "Journaling"],
-    );
-    state = [...state, aiMsg];
+  Future<void> _getAIResponse(String userMessage) async {
+    try {
+      final response = await http.post(
+        Uri.parse(ApiConstants.chatEndpoint),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          "user_id": "user_123", // In a real app, use the actual user id
+          "message": userMessage,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final emotion = data['emotion'];
+        final responseData = data['response'];
+        
+        final aiMsg = ChatMessage(
+          id: DateTime.now().toString(),
+          text: responseData['text'],
+          isUser: false,
+          timestamp: DateTime.now(),
+          suggestions: [
+            "Emotion: $emotion",
+            responseData['suggestion'],
+            responseData['reflection'],
+          ],
+        );
+        state = [...state, aiMsg];
+      } else {
+        _addErrorMsg("Server error: ${response.statusCode}");
+      }
+    } catch (e) {
+      _addErrorMsg("Connection failed. Is the backend running?");
+    }
+  }
+
+  void _addErrorMsg(String error) {
+    state = [
+      ...state,
+      ChatMessage(
+        id: DateTime.now().toString(),
+        text: "Sorry, I'm having trouble connecting. $error",
+        isUser: false,
+        timestamp: DateTime.now(),
+      )
+    ];
   }
 }
 

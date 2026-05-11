@@ -5,6 +5,10 @@ from fastapi import Request
 from app.routes import chat_routes
 import logging
 import traceback
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Configure Logging
 logging.basicConfig(

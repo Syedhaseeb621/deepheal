@@ -73,6 +73,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   }
 
   Widget _buildChatBubble(ChatMessage message) {
+    final isTyping = message.id == 'typing';
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: Column(
@@ -108,14 +110,25 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                       ),
                     ],
                   ),
-                  child: Text(
-                    message.text,
-                    style: TextStyle(
-                      color: message.isUser ? Colors.white : AppColors.textPrimary,
-                      fontSize: 15,
-                      height: 1.4,
-                    ),
-                  ),
+                  child: isTyping 
+                    ? Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _buildDot(0),
+                          const SizedBox(width: 4),
+                          _buildDot(1),
+                          const SizedBox(width: 4),
+                          _buildDot(2),
+                        ],
+                      )
+                    : Text(
+                        message.text,
+                        style: TextStyle(
+                          color: message.isUser ? Colors.white : AppColors.textPrimary,
+                          fontSize: 15,
+                          height: 1.4,
+                        ),
+                      ),
                 ).animate().scale(begin: const Offset(0.9, 0.9), curve: Curves.easeOutBack),
               ),
               const SizedBox(width: 8),
@@ -127,7 +140,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 ),
             ],
           ),
-          if (!message.isUser && message.suggestions != null) ...[
+          if (!message.isUser && !isTyping && message.suggestions != null) ...[
             const SizedBox(height: 12),
             _buildSuggestions(message.suggestions!),
             const SizedBox(height: 12),
@@ -136,6 +149,20 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         ],
       ),
     );
+  }
+
+  Widget _buildDot(int index) {
+    return Container(
+      width: 6,
+      height: 6,
+      decoration: const BoxDecoration(color: AppColors.textDisabled, shape: BoxShape.circle),
+    ).animate(onPlay: (controller) => controller.repeat())
+     .scale(
+       duration: 600.ms, 
+       delay: (index * 200).ms, 
+       begin: const Offset(1, 1), 
+       end: const Offset(1.5, 1.5)
+     ).then().scale(duration: 600.ms, begin: const Offset(1.5, 1.5), end: const Offset(1, 1));
   }
 
   Widget _buildSuggestions(List<String> suggestions) {

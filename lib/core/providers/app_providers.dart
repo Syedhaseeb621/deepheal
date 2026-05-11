@@ -61,6 +61,15 @@ class ChatNotifier extends Notifier<List<ChatMessage>> {
     );
     state = [...state, userMsg];
     
+    // Add "Typing..." placeholder
+    final typingMsg = ChatMessage(
+      id: 'typing',
+      text: '...',
+      isUser: false,
+      timestamp: DateTime.now(),
+    );
+    state = [...state, typingMsg];
+    
     // Call real Backend API
     await _getAIResponse(text);
   }
@@ -71,15 +80,22 @@ class ChatNotifier extends Notifier<List<ChatMessage>> {
         Uri.parse(ApiConstants.chatEndpoint),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          "user_id": "user_123", // In a real app, use the actual user id
+          "user_id": "user_123", 
           "message": userMessage,
         }),
-      );
+      ).timeout(const Duration(seconds: 10));
+
+      // Remove typing indicator
+      state = state.where((m) => m.id != 'typing').toList();
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final emotion = data['emotion'];
-        final responseData = data['response'];
+        final emotion = data['emotion'] ?? 'default';
+        final responseData = data['response'] ?? {
+          'text': "I'm here for you.",
+          'suggestion': "Take a deep breath.",
+          'reflection': "How are you feeling now?"
+        };
         
         final aiMsg = ChatMessage(
           id: DateTime.now().toString(),
@@ -97,7 +113,9 @@ class ChatNotifier extends Notifier<List<ChatMessage>> {
         _addErrorMsg("Server error: ${response.statusCode}");
       }
     } catch (e) {
-      _addErrorMsg("Connection failed. Is the backend running?");
+      // Remove typing indicator on error
+      state = state.where((m) => m.id != 'typing').toList();
+      _addErrorMsg("Connection failed. Please ensure the backend is running at ${ApiConstants.baseUrl}");
     }
   }
 

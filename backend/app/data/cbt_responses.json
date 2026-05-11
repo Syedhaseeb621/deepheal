@@ -1,42 +1,42 @@
 {
   "stress": {
-    "response": "It sounds like you're under a lot of pressure right now. I want you to know that it's okay to feel this way.",
-    "suggestion": "Try the 4-7-8 breathing technique: inhale for 4 seconds, hold for 7, and exhale for 8. It can help calm your nervous system.",
-    "reflection": "What is one small thing you can control in your environment right now?"
+    "response": "I can hear how much weight you're carrying right now. Stress can make everything feel like a mountain, but I want you to know that your feelings are a valid response to a heavy load.",
+    "suggestion": "Let's try the 'Box Breathing' technique: Inhale for 4, hold for 4, exhale for 4, and hold for 4. Repeat this 3 times to signal to your nervous system that you are safe.",
+    "reflection": "If you could set aside just 10% of your current responsibilities for tomorrow, which ones would they be, and how would that change your breathing?"
   },
   "sadness": {
-    "response": "I'm sorry to hear you're feeling down. It's important to give yourself permission to feel these emotions without judgment.",
-    "suggestion": "Consider writing down three small things you're grateful for today, even if they seem insignificant.",
-    "reflection": "If you were talking to a friend who felt this way, what kind words would you say to them?"
+    "response": "I'm so sorry you're feeling this way. Sadness is often the heart's way of honoring what it cares about. Please be as gentle with yourself as you would be with a dear friend.",
+    "suggestion": "Try a 'Behavioral Activation' step: What is one very small activity that usually brings you a tiny bit of comfort? Even just making a cup of tea or sitting by a window for 5 minutes.",
+    "reflection": "If this sadness had a voice, what need or value would it be trying to express to you right now?"
   },
   "anxiety": {
-    "response": "Anxiety can feel like a heavy weight. Let's try to ground ourselves in the present moment.",
-    "suggestion": "Try the 5-4-3-2-1 grounding exercise: Name 5 things you see, 4 things you can touch, 3 things you hear, 2 you can smell, and 1 you can taste.",
-    "reflection": "Is there a specific thought that's fueling this feeling, and is there any evidence that contradicts it?"
+    "response": "It sounds like your mind is racing ahead to protect you from the unknown. Anxiety is a powerful alarm, but it isn't always an accurate map of reality.",
+    "suggestion": "Try the 'Rule of 3-3-3': Name 3 things you see, 3 sounds you hear, and move 3 parts of your body. This helps pull your brain out of the future and back into the safety of the present.",
+    "reflection": "What is the 'worst case' your mind is imagining, and what is one piece of evidence you have right now that you are capable of handling it if it happened?"
   },
   "anger": {
-    "response": "I hear that you're feeling a lot of frustration. Anger is often a signal that something feels unfair or overwhelming.",
-    "suggestion": "Try a short 'venting' write-up—set a timer for 2 minutes and write everything you're feeling without censoring yourself, then discard it.",
-    "reflection": "What need is your anger trying to protect right now?"
+    "response": "I hear the intensity of your frustration. Anger is often a protective shell for deeper feelings like hurt or unfairness. It's okay to feel this heat; let's find a way to let it out safely.",
+    "suggestion": "Try 'Progressive Muscle Relaxation': Clench your fists as tight as you can for 5 seconds, then release them completely. Notice the difference between the tension and the release.",
+    "reflection": "What boundary of yours feels like it's being crossed right now, and what would a healthy way to re-establish it look like?"
   },
   "fatigue": {
-    "response": "It sounds like you're completely drained. Fatigue can affect every part of your well-being.",
-    "suggestion": "Prioritize one essential task and let the rest wait. A short 15-minute power nap or a walk in fresh air might also help.",
-    "reflection": "How long have you been pushing yourself without a break?"
+    "response": "You sound truly exhausted, both in body and spirit. When we are this drained, our perspective can become very narrow. You deserve a moment of pure rest without any 'shoulds'.",
+    "suggestion": "Practice 'Radical Permission': For the next 30 minutes, give yourself absolute permission to do nothing. No scrolling, no planning—just being still.",
+    "reflection": "What is one thing you are doing right now out of obligation that you could realistically delegate or let go of?"
   },
   "loneliness": {
-    "response": "Feeling alone is a very difficult experience. It's human to crave connection.",
-    "suggestion": "Try reaching out to one person today, even just for a quick text, or visit a public space like a library or cafe to be around others.",
-    "reflection": "What are some ways you have felt connected to others in the past?"
+    "response": "Feeling disconnected from others is a deeply painful human experience. It's important to remember that being alone doesn't mean you are unworthy of connection.",
+    "suggestion": "Try 'Micro-Connection': Send a simple check-in text to one person, or even just smile at someone if you go out. Small interactions can sometimes bridge the gap.",
+    "reflection": "What is one quality you appreciate about yourself that you would eventually like to share with a new friend?"
   },
   "guilt": {
-    "response": "Guilt can be a very heavy burden to carry. It's often linked to our values and things we care about.",
-    "suggestion": "Try to distinguish between things you can control and things you can't. Writing a letter of apology (even if you don't send it) can help.",
-    "reflection": "Are you holding yourself to an impossible standard right now?"
+    "response": "Guilt can feel like a heavy anchor. It often stems from a place of high standards and a kind heart. Let's look at whether this burden is truly yours to carry.",
+    "suggestion": "Try the 'Compassionate Friend' exercise: Write down what you're guilty about, then imagine a wise, kind person reading it. What would they say to comfort you?",
+    "reflection": "Are you judging your past self based on information you only have now in the present?"
   },
   "default": {
-    "response": "I'm here to listen and support you. Sometimes just sharing how you feel is the first step.",
-    "suggestion": "Try taking a few slow, deep breaths and see if you can identify where in your body you feel this most.",
-    "reflection": "Can you tell me more about what's on your mind?"
+    "response": "I'm here to listen and support you. Your thoughts and feelings matter, and sharing them is a courageous first step toward feeling better.",
+    "suggestion": "Let's start with a grounding breath. Inhale deeply through your nose, and exhale slowly through your mouth. How does your body feel in this moment?",
+    "reflection": "If we were to focus on just one part of what's on your mind today, which part feels the most important to talk about?"
   }
 }

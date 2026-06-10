@@ -144,7 +144,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             const SizedBox(height: 12),
             _buildSuggestions(message.suggestions!),
             const SizedBox(height: 12),
-            _buildFeedbackButtons(),
+            _buildFeedbackButtons(message),
           ],
         ],
       ),
@@ -183,21 +183,43 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     ).animate().fadeIn(delay: 500.ms).slideY(begin: 0.2, end: 0);
   }
 
-  Widget _buildFeedbackButtons() {
+  Widget _buildFeedbackButtons(ChatMessage message) {
+    final hasThumbsUp = message.feedback == 'positive';
+    final hasThumbsDown = message.feedback == 'negative';
+
     return Row(
       children: [
         const SizedBox(width: 40),
         IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.thumb_up_off_alt, size: 16, color: AppColors.textDisabled),
+          onPressed: () {
+            ref.read(chatProvider.notifier).updateMessageFeedback(message.id, 'positive');
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Feedback saved. Thank you!')),
+            );
+          },
+          icon: Icon(
+            hasThumbsUp ? Icons.thumb_up_rounded : Icons.thumb_up_off_alt,
+            size: 16,
+            color: hasThumbsUp ? AppColors.primary : AppColors.textDisabled,
+          ),
         ),
         IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.thumb_down_off_alt, size: 16, color: AppColors.textDisabled),
+          onPressed: () {
+            ref.read(chatProvider.notifier).updateMessageFeedback(message.id, 'negative');
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Feedback saved. We will improve!')),
+            );
+          },
+          icon: Icon(
+            hasThumbsDown ? Icons.thumb_down_rounded : Icons.thumb_down_off_alt,
+            size: 16,
+            color: hasThumbsDown ? Colors.redAccent : AppColors.textDisabled,
+          ),
         ),
       ],
     ).animate().fadeIn(delay: 700.ms);
   }
+
 
   Widget _buildInputArea() {
     return Container(

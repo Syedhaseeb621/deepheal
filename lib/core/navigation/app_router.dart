@@ -61,9 +61,10 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/result',
       builder: (context, state) {
-        // We'll pass result data later
-        return const ResultScreen();
+        final result = state.extra as EmotionResult?;
+        return ResultScreen(result: result);
       },
     ),
   ],
 );
+

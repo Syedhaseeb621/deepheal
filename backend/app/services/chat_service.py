@@ -15,16 +15,19 @@ class ChatService:
         # 1. Detect emotion
         emotion = self.emotion_engine.detect_emotion(message)
         
-        # 2. Store in memory
-        self.memory_service.add_message(user_id, message)
+        # 2. Retrieve history context *before* adding current message to memory
+        history = self.memory_service.get_history(user_id)
         
         # 3. Get response (Try Gemini first, fallback to CBT JSON)
-        response_data = self.gemini_service.generate_cbt_response(message, emotion)
+        response_data = self.gemini_service.generate_cbt_response(message, emotion, history)
+        
+        # 4. Store current user message in memory
+        self.memory_service.add_message(user_id, message)
         
         if not response_data:
             response_data = self.cbt_service.get_structured_response(emotion)
         
-        # 4. Format final response
+        # 5. Format final response
         return ChatResponse(
             emotion=emotion,
             response=ChatResponseContent(
@@ -33,3 +36,4 @@ class ChatService:
                 reflection=response_data["reflection"]
             )
         )
+

@@ -4,18 +4,30 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/glass_card.dart';
+import '../../../../data/models/app_models.dart';
 
 class ResultScreen extends StatelessWidget {
-  const ResultScreen({super.key});
+  final EmotionResult? result;
+  
+  const ResultScreen({super.key, this.result});
 
   @override
   Widget build(BuildContext context) {
+    final themeColor = result?.color ?? AppColors.teal;
+    final emotion = result?.emotionName ?? 'Peaceful';
+    final confidencePercent = result != null ? '${(result!.confidence * 100).toInt()}%' : '94%';
+    final insightText = result?.insight ?? 'Based on your expression and choice of words, you appear to be in a calm, reflective state.';
+    final suggestionsList = result?.suggestions ?? [
+      'Practice a short focused breathing exercise.',
+      'Reflect on your thoughts in a journal entry.'
+    ];
+
     return Scaffold(
       body: Container(
         width: double.infinity,
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppColors.primary.withOpacity(0.05), AppColors.purple.withOpacity(0.05)],
+            colors: [themeColor.withOpacity(0.05), AppColors.purple.withOpacity(0.05)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -29,13 +41,13 @@ class ResultScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
                   child: Column(
                     children: [
-                      _buildEmotionCircle(),
+                      _buildEmotionCircle(themeColor, emotion),
                       const SizedBox(height: 32),
-                      _buildScoreSection(),
+                      _buildScoreSection(confidencePercent, themeColor),
                       const SizedBox(height: 32),
-                      _buildInsightSection(),
+                      _buildInsightSection(insightText),
                       const SizedBox(height: 32),
-                      _buildSuggestionsSection(context),
+                      _buildSuggestionsSection(context, suggestionsList, themeColor),
                     ],
                   ),
                 ),
@@ -74,7 +86,7 @@ class ResultScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildEmotionCircle() {
+  Widget _buildEmotionCircle(Color color, String emotion) {
     return Column(
       children: [
         Container(
@@ -84,31 +96,31 @@ class ResultScreen extends StatelessWidget {
             color: Colors.white,
             shape: BoxShape.circle,
             boxShadow: [
-              BoxShadow(color: AppColors.teal.withOpacity(0.3), blurRadius: 40, spreadRadius: 10),
+              BoxShadow(color: color.withOpacity(0.3), blurRadius: 40, spreadRadius: 10),
             ],
           ),
-          child: const Center(
-            child: Icon(Icons.sentiment_satisfied_alt_rounded, size: 80, color: AppColors.teal),
+          child: Center(
+            child: Icon(Icons.sentiment_satisfied_alt_rounded, size: 80, color: color),
           ),
         ).animate().scale(duration: 800.ms, curve: Curves.easeOutBack),
         const SizedBox(height: 16),
-        const Text(
-          'Peaceful',
-          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: AppColors.teal),
+        Text(
+          emotion,
+          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: color),
         ).animate().fadeIn(delay: 500.ms),
       ],
     );
   }
 
-  Widget _buildScoreSection() {
+  Widget _buildScoreSection(String confidence, Color color) {
     return GlassCard(
       padding: const EdgeInsets.all(20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildScoreItem('Confidence', '94%', AppColors.primary),
+          _buildScoreItem('Confidence', confidence, AppColors.primary),
           Container(width: 1, height: 40, color: AppColors.textDisabled.withOpacity(0.2)),
-          _buildScoreItem('Stability', 'High', AppColors.teal),
+          _buildScoreItem('Stability', 'High', color),
         ],
       ),
     ).animate().fadeIn(delay: 700.ms).slideY(begin: 0.2, end: 0);
@@ -124,41 +136,36 @@ class ResultScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInsightSection() {
+  Widget _buildInsightSection(String insight) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text('AI Insight', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         const SizedBox(height: 12),
-        const Text(
-          'Based on your expression and choice of words, you appear to be in a calm, reflective state. Your respiratory rate seems steady, indicating low stress levels.',
-          style: TextStyle(color: AppColors.textSecondary, height: 1.6),
+        Text(
+          insight,
+          style: const TextStyle(color: AppColors.textSecondary, height: 1.6),
         ),
       ],
     ).animate().fadeIn(delay: 900.ms).slideX(begin: 0.1, end: 0);
   }
 
-  Widget _buildSuggestionsSection(BuildContext context) {
+  Widget _buildSuggestionsSection(BuildContext context, List<String> suggestions, Color color) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text('Suggested Actions', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         const SizedBox(height: 16),
-        _buildSuggestionCard(
-          context,
-          '5-Min Meditation',
-          'Perfect to maintain this peaceful state.',
-          Icons.self_improvement_rounded,
-          AppColors.teal,
-        ),
-        const SizedBox(height: 12),
-        _buildSuggestionCard(
-          context,
-          'Gratitude Journal',
-          'Note down three things you are grateful for.',
-          Icons.edit_note_rounded,
-          AppColors.primary,
-        ),
+        ...suggestions.map((suggestion) => Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: _buildSuggestionCard(
+            context,
+            suggestion,
+            'Recommended based on your current state.',
+            Icons.self_improvement_rounded,
+            color,
+          ),
+        )).toList(),
       ],
     ).animate().fadeIn(delay: 1100.ms).slideY(begin: 0.1, end: 0);
   }
@@ -194,3 +201,4 @@ class ResultScreen extends StatelessWidget {
     );
   }
 }
+

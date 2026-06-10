@@ -12,17 +12,18 @@ void main() {
   );
 }
 
-class DeepHealApp extends StatelessWidget {
+class DeepHealApp extends ConsumerWidget {
   const DeepHealApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(themeProvider);
     return MaterialApp.router(
       title: 'DeepHeal',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
+      themeMode: themeMode,
       routerConfig: appRouter,
     );
   }

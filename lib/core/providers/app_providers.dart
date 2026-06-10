@@ -1,7 +1,12 @@
+import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/models/user_model.dart';
 import '../../data/models/app_models.dart';
 import '../../data/mock/mock_data.dart';
+import '../constants/api_constants.dart';
 
 // Auth State Provider
 final authProvider = NotifierProvider<AuthNotifier, UserModel?>(() {
@@ -25,6 +30,72 @@ class NavIndexNotifier extends Notifier<int> {
   void setIndex(int index) => state = index;
 }
 
+// Theme Mode Provider (Light/Dark/System)
+final themeProvider = NotifierProvider<ThemeNotifier, ThemeMode>(() {
+  return ThemeNotifier();
+});
+
+class ThemeNotifier extends Notifier<ThemeMode> {
+  @override
+  ThemeMode build() {
+    _loadTheme();
+    return ThemeMode.system;
+  }
+
+  Future<void> _loadTheme() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final mode = prefs.getString('theme_mode');
+      if (mode == 'light') {
+        state = ThemeMode.light;
+      } else if (mode == 'dark') {
+        state = ThemeMode.dark;
+      } else {
+        state = ThemeMode.system;
+      }
+    } catch (_) {}
+  }
+
+  Future<void> toggleTheme(bool isDark) async {
+    state = isDark ? ThemeMode.dark : ThemeMode.light;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('theme_mode', isDark ? 'dark' : 'light');
+    } catch (_) {}
+  }
+}
+
+// Notifications Toggle Provider
+final notificationsEnabledProvider = NotifierProvider<NotificationsNotifier, bool>(() {
+  return NotificationsNotifier();
+});
+
+class NotificationsNotifier extends Notifier<bool> {
+  @override
+  bool build() {
+    _loadNotificationSetting();
+    return true; // Enabled by default
+  }
+
+  Future<void> _loadNotificationSetting() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final enabled = prefs.getBool('notifications_enabled');
+      if (enabled != null) {
+        state = enabled;
+      }
+    } catch (_) {}
+  }
+
+  Future<void> toggleNotifications(bool enabled) async {
+    state = enabled;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('notifications_enabled', enabled);
+    } catch (_) {}
+  }
+}
+
 // Emotion History Provider
 final emotionHistoryProvider = NotifierProvider<EmotionHistoryNotifier, List<EmotionResult>>(() {
   return EmotionHistoryNotifier();
@@ -32,16 +103,30 @@ final emotionHistoryProvider = NotifierProvider<EmotionHistoryNotifier, List<Emo
 
 class EmotionHistoryNotifier extends Notifier<List<EmotionResult>> {
   @override
-  List<EmotionResult> build() => MockData.emotionHistory;
+  List<EmotionResult> build() {
+    _loadHistory();
+    return MockData.emotionHistory;
+  }
 
-  void addResult(EmotionResult result) {
+  Future<void> _loadHistory() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final list = prefs.getStringList('emotion_history');
+      if (list != null) {
+        state = list.map((item) => EmotionResult.fromJson(jsonDecode(item))).toList();
+      }
+    } catch (_) {}
+  }
+
+  Future<void> addResult(EmotionResult result) async {
     state = [result, ...state];
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final list = state.map((item) => jsonEncode(item.toJson())).toList();
+      await prefs.setStringList('emotion_history', list);
+    } catch (_) {}
   }
 }
-
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import '../constants/api_constants.dart';
 
 // Chat Provider
 final chatProvider = NotifierProvider<ChatNotifier, List<ChatMessage>>(() {
@@ -50,16 +135,48 @@ final chatProvider = NotifierProvider<ChatNotifier, List<ChatMessage>>(() {
 
 class ChatNotifier extends Notifier<List<ChatMessage>> {
   @override
-  List<ChatMessage> build() => MockData.initialMessages;
+  List<ChatMessage> build() {
+    _loadHistory();
+    return MockData.initialMessages;
+  }
+
+  Future<void> _loadHistory() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final list = prefs.getStringList('chat_history');
+      if (list != null) {
+        state = list.map((item) => ChatMessage.fromJson(jsonDecode(item))).toList();
+      }
+    } catch (_) {}
+  }
+
+  Future<void> _saveHistory() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final list = state.map((item) => jsonEncode(item.toJson())).toList();
+      await prefs.setStringList('chat_history', list);
+    } catch (_) {}
+  }
+
+  Future<void> updateMessageFeedback(String messageId, String? feedback) async {
+    state = state.map((m) => m.id == messageId ? m.copyWith(feedback: feedback) : m).toList();
+    await _saveHistory();
+  }
+
+  Future<void> clearHistory() async {
+    state = MockData.initialMessages;
+    await _saveHistory();
+  }
 
   Future<void> sendMessage(String text) async {
     final userMsg = ChatMessage(
-      id: DateTime.now().toString(),
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
       text: text,
       isUser: true,
       timestamp: DateTime.now(),
     );
     state = [...state, userMsg];
+    await _saveHistory();
     
     // Add "Typing..." placeholder
     final typingMsg = ChatMessage(
@@ -83,7 +200,7 @@ class ChatNotifier extends Notifier<List<ChatMessage>> {
           "user_id": "user_123", 
           "message": userMessage,
         }),
-      ).timeout(const Duration(seconds: 10));
+      ).timeout(const Duration(seconds: 15));
 
       // Remove typing indicator
       state = state.where((m) => m.id != 'typing').toList();
@@ -98,7 +215,7 @@ class ChatNotifier extends Notifier<List<ChatMessage>> {
         };
         
         final aiMsg = ChatMessage(
-          id: DateTime.now().toString(),
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
           text: responseData['text'],
           isUser: false,
           timestamp: DateTime.now(),
@@ -117,13 +234,14 @@ class ChatNotifier extends Notifier<List<ChatMessage>> {
       state = state.where((m) => m.id != 'typing').toList();
       _addErrorMsg("Connection failed. Please ensure the backend is running at ${ApiConstants.baseUrl}");
     }
+    await _saveHistory();
   }
 
   void _addErrorMsg(String error) {
     state = [
       ...state,
       ChatMessage(
-        id: DateTime.now().toString(),
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
         text: "Sorry, I'm having trouble connecting. $error",
         isUser: false,
         timestamp: DateTime.now(),
@@ -139,9 +257,28 @@ final therapyHistoryProvider = NotifierProvider<TherapyHistoryNotifier, List<The
 
 class TherapyHistoryNotifier extends Notifier<List<TherapySession>> {
   @override
-  List<TherapySession> build() => MockData.therapyHistory;
+  List<TherapySession> build() {
+    _loadHistory();
+    return MockData.therapyHistory;
+  }
 
-  void addSession(TherapySession session) {
+  Future<void> _loadHistory() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final list = prefs.getStringList('therapy_history');
+      if (list != null) {
+        state = list.map((item) => TherapySession.fromJson(jsonDecode(item))).toList();
+      }
+    } catch (_) {}
+  }
+
+  Future<void> addSession(TherapySession session) async {
     state = [session, ...state];
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final list = state.map((item) => jsonEncode(item.toJson())).toList();
+      await prefs.setStringList('therapy_history', list);
+    } catch (_) {}
   }
 }
+

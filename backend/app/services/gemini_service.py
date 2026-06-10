@@ -14,18 +14,23 @@ class GeminiService:
         else:
             self.model = None
 
-    def generate_cbt_response(self, user_message: str, emotion: str) -> Optional[Dict]:
+    def generate_cbt_response(self, user_message: str, emotion: str, history: list = None) -> Optional[Dict]:
         if not self.model:
             return None
 
+        history_context = ""
+        if history:
+            history_context = "\nRecent conversation history:\n" + "\n".join(f"User: {msg}" for msg in history)
+
         prompt = f"""
         You are DeepHeal AI, a professional and empathetic mental health companion specialized in Cognitive Behavioral Therapy (CBT).
-        The user is feeling: {emotion.upper()}.
-        User message: "{user_message}"
+        The user is currently feeling: {emotion.upper()}.
+        {history_context}
+        Current User message: "{user_message}"
 
         Your task is to provide a structured response in exactly this JSON format:
         {{
-            "response": "A highly empathetic and warm acknowledgment of their feelings, using CBT principles to validate and comfort.",
+            "response": "A highly empathetic and warm acknowledgment of their feelings, using CBT principles to validate and comfort. Incorporate context from recent conversation if relevant.",
             "suggestion": "A specific, actionable therapeutic exercise or technique (e.g., grounding, breathing, behavioral activation) they can do right now.",
             "reflection": "A thoughtful question designed to encourage deeper self-insight or cognitive reframing."
         }}
@@ -33,6 +38,7 @@ class GeminiService:
         Keep the tone premium, professional, and deeply supportive. Avoid generic advice; make it feel personal and therapeutic.
         Only return the JSON object.
         """
+
 
         try:
             response = self.model.generate_content(prompt)

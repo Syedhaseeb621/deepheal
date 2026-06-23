@@ -4,6 +4,9 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:camera/camera.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:permission_handler/permission_handler.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/providers/app_providers.dart';
 import '../../../../core/constants/api_constants.dart';
@@ -18,24 +21,56 @@ class EmotionAnalysisScreen extends ConsumerStatefulWidget {
   ConsumerState<EmotionAnalysisScreen> createState() => _EmotionAnalysisScreenState();
 }
 
-class _EmotionAnalysisScreenState extends ConsumerState<EmotionAnalysisScreen> with SingleTickerProviderStateMixin {
+class _EmotionAnalysisScreenState extends EmotionAnalysisScreenContent {
+}
+
+abstract class EmotionAnalysisScreenContent extends ConsumerState<EmotionAnalysisScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   bool _isAnalyzing = false;
   bool _isVoiceRecording = false;
   bool _isFaceScanning = false;
   final _textController = TextEditingController();
 
+  // Camera & Voice
+  CameraController? _cameraController;
+  stt.SpeechToText _speech = stt.SpeechToText();
+  List<CameraDescription>? _cameras;
+  String _lastWords = "";
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    _initHardware();
+  }
+
+  Future<void> _initHardware() async {
+    try {
+      _cameras = await availableCameras();
+    } catch (e) {
+      print("Error initializing hardware: $e");
+    }
   }
 
   @override
   void dispose() {
     _tabController.dispose();
     _textController.dispose();
+    _cameraController?.dispose();
     super.dispose();
+  }
+
+  Future<void> _initCamera() async {
+    if (_cameras == null || _cameras!.isEmpty) return;
+    
+    final frontCamera = _cameras!.firstWhere(
+      (camera) => camera.lensDirection == CameraLensDirection.front,
+      orElse: () => _cameras!.first,
+    );
+
+    _cameraController = CameraController(frontCamera, ResolutionPreset.medium);
+    await _cameraController!.initialize();
+    if (mounted) setState(() {});
   }
 
   void _analyzeText() async {
@@ -50,11 +85,12 @@ class _EmotionAnalysisScreenState extends ConsumerState<EmotionAnalysisScreen> w
     setState(() => _isAnalyzing = true);
 
     try {
+      final user = ref.read(authProvider);
       final response = await http.post(
         Uri.parse(ApiConstants.chatEndpoint),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          "user_id": "user_123",
+          "user_id": user?.id ?? "user_123",
           "message": text,
         }),
       ).timeout(const Duration(seconds: 12));
@@ -139,46 +175,54 @@ class _EmotionAnalysisScreenState extends ConsumerState<EmotionAnalysisScreen> w
   }
 
   void _analyzeVoice() async {
-    setState(() => _isVoiceRecording = true);
-    
-    // Simulate recording voice for 3 seconds
-    await Future.delayed(const Duration(seconds: 3));
-    
-    if (!mounted) return;
-    
-    // Dynamic mock voice emotion extraction
-    final voiceEmotions = [
-      {'name': 'Calm', 'color': Colors.teal, 'insight': 'Acoustic pitch and volume variance indicate stable, calm tone signatures.'},
-      {'name': 'Fatigue', 'color': Colors.grey, 'insight': 'Speech pace deceleration and flat pitch intervals suggest exhaustion.'},
-      {'name': 'Anxiety', 'color': Colors.amber, 'insight': 'Micro-tremors and speed rate variance suggest high anxiety levels.'},
-    ];
-    final selected = (voiceEmotions..shuffle()).first;
+    final status = await Permission.microphone.request();
+    if (!status.isGranted) return;
 
-    final newResult = EmotionResult(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      emotionName: '${selected["name"]} (Voice Analysis)',
-      confidence: 0.82,
-      insight: selected['insight'] as String,
-      timestamp: DateTime.now(),
-      suggestions: ['Maintain vocal hydration.', 'Try 3 minutes of rhythmic breathing.'],
-      color: selected['color'] as Color,
+    bool available = await _speech.initialize(
+      onStatus: (val) => print('onStatus: $val'),
+      onError: (val) => print('onError: $val'),
     );
 
-    ref.read(emotionHistoryProvider.notifier).addResult(newResult);
-    
-    setState(() => _isVoiceRecording = false);
-    context.push('/result', extra: newResult);
+    if (available) {
+      setState(() => _isVoiceRecording = true);
+      _speech.listen(
+        onResult: (val) => setState(() {
+          _lastWords = val.recognizedWords;
+          if (val.finalResult) {
+            _isVoiceRecording = false;
+            _textController.text = _lastWords;
+            _analyzeText(); // Analyze the transcribed text
+          }
+        }),
+      );
+      
+      // Stop listening after 5 seconds
+      Future.delayed(const Duration(seconds: 5), () {
+        if (_isVoiceRecording) {
+          _speech.stop();
+          setState(() => _isVoiceRecording = false);
+        }
+      });
+    }
   }
 
   void _analyzeFace() async {
+    if (_cameraController == null || !_cameraController!.value.isInitialized) {
+      await _initCamera();
+    }
+    
     setState(() => _isFaceScanning = true);
     
-    // Simulate camera facial processing for 3 seconds
-    await Future.delayed(const Duration(seconds: 3));
+    // Simulate complex scanning
+    await Future.delayed(const Duration(seconds: 4));
     
     if (!mounted) return;
     
-    // Dynamic mock face emotion extraction
+    // Try capturing a photo (optional logic, just to trigger real HW)
+    try {
+      await _cameraController?.takePicture();
+    } catch (_) {}
+
     final faceEmotions = [
       {'name': 'Peaceful', 'color': Colors.teal, 'insight': 'Micro-expression analysis shows relaxed brow and jaw alignment.'},
       {'name': 'Stressed', 'color': Colors.orange, 'insight': 'Minor tension markers detected in the forehead and eye-corner landmarks.'},
@@ -216,7 +260,7 @@ class _EmotionAnalysisScreenState extends ConsumerState<EmotionAnalysisScreen> w
           Expanded(
             child: TabBarView(
               controller: _tabController,
-              physics: const NeverScrollableScrollPhysics(), // Prevent swipe during active scans
+              physics: const NeverScrollableScrollPhysics(), 
               children: [
                 _buildTextAnalysis(),
                 _buildVoiceAnalysis(),
@@ -229,15 +273,15 @@ class _EmotionAnalysisScreenState extends ConsumerState<EmotionAnalysisScreen> w
             child: AppButton(
               text: _tabController.index == 0 
                   ? 'Start Sentiment Analysis'
-                  : (_tabController.index == 1 ? (_isVoiceRecording ? 'Recording...' : 'Start Voice Capture') : (_isFaceScanning ? 'Scanning...' : 'Start Camera Scan')),
-              isLoading: _isAnalyzing || _isVoiceRecording || _isFaceScanning,
+                  : (_tabController.index == 1 ? (_isVoiceRecording ? 'Listening...' : 'Start Voice Capture') : (_isFaceScanning ? 'Scanning...' : 'Start Camera Scan')),
+              isLoading: _isAnalyzing, // Not including voice/face as they have internal indicators
               onPressed: () {
                 if (_tabController.index == 0) {
                   _analyzeText();
                 } else if (_tabController.index == 1) {
-                  _analyzeVoice();
+                  if (!_isVoiceRecording) _analyzeVoice();
                 } else {
-                  _analyzeFace();
+                  if (!_isFaceScanning) _analyzeFace();
                 }
               },
             ).animate().fadeIn(delay: 500.ms),
@@ -256,7 +300,12 @@ class _EmotionAnalysisScreenState extends ConsumerState<EmotionAnalysisScreen> w
       ),
       child: TabBar(
         controller: _tabController,
-        onTap: (index) => setState(() {}),
+        onTap: (index) {
+          setState(() {});
+          if (index == 2 && (_cameraController == null || !_cameraController!.value.isInitialized)) {
+            _initCamera();
+          }
+        },
         indicator: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           color: AppColors.primary,
@@ -320,6 +369,15 @@ class _EmotionAnalysisScreenState extends ConsumerState<EmotionAnalysisScreen> w
             _isVoiceRecording ? 'Listening to your voice...' : 'Speak your mind',
             style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
+          if (_isVoiceRecording)
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Text(
+                _lastWords.isEmpty ? "..." : _lastWords,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontStyle: FontStyle.italic, color: AppColors.primary),
+              ),
+            ),
           const SizedBox(height: 40),
           Container(
             padding: const EdgeInsets.all(40),
@@ -341,7 +399,7 @@ class _EmotionAnalysisScreenState extends ConsumerState<EmotionAnalysisScreen> w
           ),
           const SizedBox(height: 40),
           Text(
-            _isVoiceRecording ? 'Analyzing frequency wave signatures...' : 'Tap the button below and start speaking.',
+            _isVoiceRecording ? 'Processing audio stream...' : 'Tap the button below and start speaking.',
             style: const TextStyle(color: AppColors.textSecondary),
           ),
         ],
@@ -355,7 +413,7 @@ class _EmotionAnalysisScreenState extends ConsumerState<EmotionAnalysisScreen> w
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            _isFaceScanning ? 'Scanning facial coordinates...' : 'Face Emotion Detection',
+            _isFaceScanning ? 'Analyzing facial coordinates...' : 'Face Emotion Detection',
             style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 40),
@@ -363,19 +421,21 @@ class _EmotionAnalysisScreenState extends ConsumerState<EmotionAnalysisScreen> w
             width: 250,
             height: 250,
             decoration: BoxDecoration(
-              color: AppColors.textDisabled.withOpacity(0.1),
+              color: Colors.black.withOpacity(0.1),
               borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: (_isFaceScanning ? AppColors.primary : AppColors.purple).withOpacity(0.3), width: 2),
+              border: Border.all(
+                color: (_isFaceScanning ? AppColors.primary : AppColors.purple).withOpacity(0.3), 
+                width: 2
+              ),
             ),
+            clipBehavior: Clip.antiAlias,
             child: Stack(
               children: [
-                Center(
-                  child: Icon(
-                    Icons.face_retouching_natural_rounded, 
-                    size: 100, 
-                    color: _isFaceScanning ? AppColors.primary : AppColors.textDisabled
-                  )
-                ),
+                if (_cameraController != null && _cameraController!.value.isInitialized)
+                  SizedBox.expand(child: CameraPreview(_cameraController!))
+                else
+                  const Center(child: Icon(Icons.face_retouching_natural_rounded, size: 80, color: Colors.grey)),
+                
                 if (_isFaceScanning)
                   Positioned(
                     top: 0,

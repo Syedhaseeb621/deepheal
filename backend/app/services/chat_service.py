@@ -12,14 +12,18 @@ class ChatService:
         self.gemini_service = GeminiService()
 
     def process_message(self, user_id: str, message: str) -> ChatResponse:
+        print(f"DEBUG: Processing message for {user_id}: {message}")
+        
         # 1. Detect emotion
         emotion = self.emotion_engine.detect_emotion(message)
+        print(f"DEBUG: Detected Emotion: {emotion}")
         
         # 2. Retrieve history context *before* adding current message to memory
         history = self.memory_service.get_history(user_id)
         
         # 3. Get response (Try Gemini first, fallback to CBT JSON)
         response_data = self.gemini_service.generate_cbt_response(message, emotion, history)
+        print(f"DEBUG: Gemini Response Data: {response_data}")
         
         # 4. Store current user message in memory
         self.memory_service.add_message(user_id, message)

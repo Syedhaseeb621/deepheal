@@ -24,29 +24,32 @@ class AppTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.02),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: TextFormField(
-            controller: controller,
-            obscureText: isPassword,
-            validator: validator,
-            keyboardType: keyboardType,
-            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
-            decoration: InputDecoration(
-              hintText: hintText,
-              prefixIcon: prefixIcon != null 
-                ? Icon(prefixIcon, color: AppColors.primary.withOpacity(0.7), size: 22)
-                : null,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+        TextFormField(
+          controller: controller,
+          obscureText: isPassword,
+          validator: validator,
+          keyboardType: keyboardType,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          decoration: InputDecoration(
+            hintText: hintText,
+            hintStyle: TextStyle(color: AppColors.textDisabled.withOpacity(0.8)),
+            prefixIcon: prefixIcon != null 
+              ? Icon(prefixIcon, color: AppColors.primary.withOpacity(0.8), size: 22)
+              : null,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+            filled: true,
+            fillColor: AppColors.background.withOpacity(0.5),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide(color: Colors.black.withOpacity(0.05)),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide(color: Colors.black.withOpacity(0.05)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
             ),
           ),
         ),

@@ -16,6 +16,7 @@ class GeminiService:
 
     def generate_cbt_response(self, user_message: str, emotion: str, history: list = None) -> Optional[Dict]:
         if not self.model:
+            print("Gemini Error: Model not initialized (check API key)")
             return None
 
         history_context = ""
@@ -36,22 +37,39 @@ class GeminiService:
         }}
 
         Keep the tone premium, professional, and deeply supportive. Avoid generic advice; make it feel personal and therapeutic.
-        Only return the JSON object.
+        Return ONLY the JSON object.
         """
-
 
         try:
             response = self.model.generate_content(prompt)
-            # Basic parsing of JSON from text
+            if not response or not response.text:
+                print("Gemini Error: Empty response from model")
+                return None
+                
+            text = response.text
+            
+            # 1. Try to find JSON inside markdown blocks
             import json
             import re
             
-            # Find the JSON block in the response
-            text = response.text
+            markdown_match = re.search(r'```(?:json)?\s*(\{.*?\})\s*```', text, re.DOTALL)
+            if markdown_match:
+                try:
+                    return json.loads(markdown_match.group(1))
+                except:
+                    pass
+
+            # 2. Fallback: Find any JSON block in the response
             json_match = re.search(r'\{.*\}', text, re.DOTALL)
             if json_match:
-                return json.loads(json_match.group())
+                try:
+                    return json.loads(json_match.group())
+                except Exception as e:
+                    print(f"Gemini Error: Failed to parse JSON match: {e}\nRaw Text: {text}")
+                    return None
+            
+            print(f"Gemini Error: No JSON found in response. Raw Text: {text}")
             return None
         except Exception as e:
-            print(f"Gemini Error: {e}")
+            print(f"Gemini Error during generation: {e}")
             return None

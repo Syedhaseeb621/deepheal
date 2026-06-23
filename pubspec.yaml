@@ -46,6 +46,11 @@ dependencies:
   glassmorphism_widgets: ^0.2.2
   side_navigation: ^1.0.4
   http: ^1.2.0
+  camera: ^0.11.1
+  speech_to_text: ^7.1.0
+  permission_handler: ^11.4.0
+  path_provider: ^2.1.6
+  uuid: ^4.5.1
 
 dev_dependencies:
   flutter_test:

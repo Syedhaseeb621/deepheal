@@ -14,8 +14,33 @@ final authProvider = NotifierProvider<AuthNotifier, UserModel?>(() {
 });
 
 class AuthNotifier extends Notifier<UserModel?> {
+  static const String _userIdKey = 'persistent_user_id';
+
   @override
-  UserModel? build() => null;
+  UserModel? build() {
+    _initializeUser();
+    return null;
+  }
+
+  Future<void> _initializeUser() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      String? userId = prefs.getString(_userIdKey);
+      
+      if (userId == null) {
+        userId = 'user_${DateTime.now().millisecondsSinceEpoch}';
+        await prefs.setString(_userIdKey, userId);
+      }
+      
+      state = UserModel(
+        id: userId,
+        name: 'Sarah Mitchell', // Mock name for now
+        email: 'sarah@example.com',
+        mood: 'Calm',
+      );
+    } catch (_) {}
+  }
+
   void setUser(UserModel? user) => state = user;
 }
 
@@ -192,12 +217,15 @@ class ChatNotifier extends Notifier<List<ChatMessage>> {
   }
 
   Future<void> _getAIResponse(String userMessage) async {
+    final user = ref.read(authProvider);
+    final userId = user?.id ?? "anonymous_user";
+
     try {
       final response = await http.post(
         Uri.parse(ApiConstants.chatEndpoint),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          "user_id": "user_123", 
+          "user_id": userId, 
           "message": userMessage,
         }),
       ).timeout(const Duration(seconds: 15));

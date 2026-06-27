@@ -20,7 +20,7 @@ class MainNavigation extends ConsumerWidget {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 20,
               offset: const Offset(0, -5),
             ),
@@ -35,7 +35,7 @@ class MainNavigation extends ConsumerWidget {
           backgroundColor: Theme.of(context).brightness == Brightness.dark 
             ? AppColors.darkSurface 
             : Colors.white,
-          indicatorColor: AppColors.primary.withOpacity(0.1),
+          indicatorColor: AppColors.primary.withValues(alpha: 0.1),
           destinations: const [
             NavigationDestination(
               icon: FaIcon(FontAwesomeIcons.house, size: 20),

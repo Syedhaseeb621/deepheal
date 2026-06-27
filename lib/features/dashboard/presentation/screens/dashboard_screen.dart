@@ -115,22 +115,25 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   }
 
   Widget _buildHeader(BuildContext context) {
+    final user = ref.watch(authProvider);
+    final firstName = (user?.name ?? 'there').split(' ').first;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Column(
+        Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Good morning,',
-              style: TextStyle(
+              _getGreeting(),
+              style: const TextStyle(
                 fontSize: 16,
                 color: AppColors.textSecondary,
               ),
             ),
             Text(
-              'Sarah Mitchell',
-              style: TextStyle(
+              firstName,
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: AppColors.textPrimary,
@@ -138,14 +141,36 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             ),
           ],
         ),
-        const CircleAvatar(
-          radius: 25,
-          backgroundColor: AppColors.primaryLight,
-          child: Icon(Icons.person_outline_rounded, color: AppColors.primary),
+        Container(
+          padding: const EdgeInsets.all(2),
+          decoration: const BoxDecoration(
+            color: AppColors.primary,
+            shape: BoxShape.circle,
+          ),
+          child: CircleAvatar(
+            radius: 25,
+            backgroundColor: AppColors.primaryLight,
+            child: Text(
+              (user?.name ?? 'U').isNotEmpty ? (user?.name ?? 'U')[0].toUpperCase() : 'U',
+              style: const TextStyle(
+                color: AppColors.primary,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+          ),
         ),
       ],
     ).animate().fadeIn().slideY(begin: -0.2, end: 0);
   }
+
+  String _getGreeting() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) return 'Good morning,';
+    if (hour < 17) return 'Good afternoon,';
+    return 'Good evening,';
+  }
+
 
   Widget _buildCheckInReminder() {
     return GlassCard(
@@ -263,7 +288,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               const SizedBox(height: 16),
               AppButton(
                 text: 'Log Current Mood',
-                onPressed: _selectedMood == null ? null : _logMood,
+                onPressed: _selectedMood != null ? _logMood : null,
               ),
             ],
           ),

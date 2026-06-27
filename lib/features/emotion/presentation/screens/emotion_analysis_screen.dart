@@ -243,6 +243,7 @@ abstract class EmotionAnalysisScreenContent extends ConsumerState<EmotionAnalysi
     ref.read(emotionHistoryProvider.notifier).addResult(newResult);
     
     setState(() => _isFaceScanning = false);
+    if (!mounted) return;
     context.push('/result', extra: newResult);
   }
 
@@ -295,7 +296,7 @@ abstract class EmotionAnalysisScreenContent extends ConsumerState<EmotionAnalysi
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
-        color: AppColors.primary.withOpacity(0.05),
+        color: AppColors.primary.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(16),
       ),
       child: TabBar(
@@ -382,7 +383,7 @@ abstract class EmotionAnalysisScreenContent extends ConsumerState<EmotionAnalysi
           Container(
             padding: const EdgeInsets.all(40),
             decoration: BoxDecoration(
-              color: (_isVoiceRecording ? Colors.redAccent : AppColors.teal).withOpacity(0.1),
+              color: (_isVoiceRecording ? Colors.redAccent : AppColors.teal).withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -395,7 +396,7 @@ abstract class EmotionAnalysisScreenContent extends ConsumerState<EmotionAnalysi
           .scale(begin: const Offset(1, 1), end: const Offset(1.15, 1.15), duration: 600.ms)
           .boxShadow(
             begin: BoxShadow(color: Colors.transparent, blurRadius: 0),
-            end: BoxShadow(color: Colors.redAccent.withOpacity(0.3), blurRadius: 20, spreadRadius: 5),
+            end: BoxShadow(color: Colors.redAccent.withValues(alpha: 0.3), blurRadius: 20, spreadRadius: 5),
           ),
           const SizedBox(height: 40),
           Text(
@@ -421,10 +422,10 @@ abstract class EmotionAnalysisScreenContent extends ConsumerState<EmotionAnalysi
             width: 250,
             height: 250,
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(24),
               border: Border.all(
-                color: (_isFaceScanning ? AppColors.primary : AppColors.purple).withOpacity(0.3), 
+                color: (_isFaceScanning ? AppColors.primary : AppColors.purple).withValues(alpha: 0.3), 
                 width: 2
               ),
             ),
@@ -446,7 +447,7 @@ abstract class EmotionAnalysisScreenContent extends ConsumerState<EmotionAnalysi
                       decoration: BoxDecoration(
                         color: AppColors.primary,
                         boxShadow: [
-                          BoxShadow(color: AppColors.primary.withOpacity(0.5), blurRadius: 10, spreadRadius: 2),
+                          BoxShadow(color: AppColors.primary.withValues(alpha: 0.5), blurRadius: 10, spreadRadius: 2),
                         ],
                       ),
                     ).animate(onPlay: (controller) => controller.repeat(reverse: true))

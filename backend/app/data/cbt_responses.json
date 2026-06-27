@@ -1,42 +1,162 @@
-{
-  "stress": {
-    "response": "I can hear how much weight you're carrying right now. Stress can make everything feel like a mountain, but I want you to know that your feelings are a valid response to a heavy load.",
-    "suggestion": "Let's try the 'Box Breathing' technique: Inhale for 4, hold for 4, exhale for 4, and hold for 4. Repeat this 3 times to signal to your nervous system that you are safe.",
-    "reflection": "If you could set aside just 10% of your current responsibilities for tomorrow, which ones would they be, and how would that change your breathing?"
+[
+  {
+    "id": 1,
+    "keywords": ["work", "job", "deadline", "boss", "office", "career"],
+    "emotion": "stress",
+    "response": "Work stress and deadlines can make us feel like we are constantly playing catch-up. I hear how heavy this load is, but please remember to separate your self-worth from your productivity.",
+    "suggestion": "Try 'Task Chunking': write down the single next smallest step (e.g. write one email), and focus only on that for 15 minutes.",
+    "reflection": "If you could step away from work for just one evening without guilt, what would you do to recharge?"
   },
-  "sadness": {
-    "response": "I'm so sorry you're feeling this way. Sadness is often the heart's way of honoring what it cares about. Please be as gentle with yourself as you would be with a dear friend.",
-    "suggestion": "Try a 'Behavioral Activation' step: What is one very small activity that usually brings you a tiny bit of comfort? Even just making a cup of tea or sitting by a window for 5 minutes.",
-    "reflection": "If this sadness had a voice, what need or value would it be trying to express to you right now?"
+  {
+    "id": 2,
+    "keywords": ["exam", "test", "study", "exams", "college", "school", "grade"],
+    "emotion": "stress",
+    "response": "Academic pressure is very real, and it's easy to feel overwhelmed by the volume of information you need to absorb. Your grades do not define your intelligence or future.",
+    "suggestion": "Use the Pomodoro technique: study for 25 minutes, then take a 5-minute break to stretch and drink water.",
+    "reflection": "What is the worst-case scenario you are imagining about this exam, and how have you handled tough academic challenges before?"
   },
-  "anxiety": {
-    "response": "It sounds like your mind is racing ahead to protect you from the unknown. Anxiety is a powerful alarm, but it isn't always an accurate map of reality.",
-    "suggestion": "Try the 'Rule of 3-3-3': Name 3 things you see, 3 sounds you hear, and move 3 parts of your body. This helps pull your brain out of the future and back into the safety of the present.",
-    "reflection": "What is the 'worst case' your mind is imagining, and what is one piece of evidence you have right now that you are capable of handling it if it happened?"
+  {
+    "id": 3,
+    "keywords": ["overwhelmed", "too much", "busy", "hectic", "chaos"],
+    "emotion": "stress",
+    "response": "When everything piles up at once, our brains go into survival mode. It's completely normal to feel paralyzed when there's too much on your plate.",
+    "suggestion": "Do a 'Brain Dump': write everything that is worrying you on a piece of paper to get it out of your head, then circle just one thing to handle today.",
+    "reflection": "Which of these tasks are urgent, and which ones are expectations you've placed on yourself?"
   },
-  "anger": {
-    "response": "I hear the intensity of your frustration. Anger is often a protective shell for deeper feelings like hurt or unfairness. It's okay to feel this heat; let's find a way to let it out safely.",
-    "suggestion": "Try 'Progressive Muscle Relaxation': Clench your fists as tight as you can for 5 seconds, then release them completely. Notice the difference between the tension and the release.",
-    "reflection": "What boundary of yours feels like it's being crossed right now, and what would a healthy way to re-establish it look like?"
+  {
+    "id": 4,
+    "keywords": ["panic", "heart racing", "can't breathe", "scared", "fear"],
+    "emotion": "anxiety",
+    "response": "I hear you, and you are safe right now. Panic is a physiological response, and though it feels terrifying, it will pass. You are in control of your body.",
+    "suggestion": "Practice the 5-4-3-2-1 grounding method: Look around and name 5 things you can see, 4 things you can touch, 3 things you can hear, 2 things you can smell, and 1 thing you can taste.",
+    "reflection": "Can you feel the support of the chair or floor underneath you, holding you up right now?"
   },
-  "fatigue": {
-    "response": "You sound truly exhausted, both in body and spirit. When we are this drained, our perspective can become very narrow. You deserve a moment of pure rest without any 'shoulds'.",
-    "suggestion": "Practice 'Radical Permission': For the next 30 minutes, give yourself absolute permission to do nothing. No scrolling, no planning—just being still.",
-    "reflection": "What is one thing you are doing right now out of obligation that you could realistically delegate or let go of?"
+  {
+    "id": 5,
+    "keywords": ["future", "uncertain", "what if", "worry", "worried"],
+    "emotion": "anxiety",
+    "response": "Anxiety loves to pull us into the future and make us solve problems that haven't happened yet. It's exhausting to try to control the uncontrollable.",
+    "suggestion": "Draw a circle on a paper. Inside, write things you can control today (your breathing, your actions). Outside, write things you cannot control (the future, other people).",
+    "reflection": "If the future turns out better than your anxiety is predicting, what would that look like?"
   },
-  "loneliness": {
-    "response": "Feeling disconnected from others is a deeply painful human experience. It's important to remember that being alone doesn't mean you are unworthy of connection.",
-    "suggestion": "Try 'Micro-Connection': Send a simple check-in text to one person, or even just smile at someone if you go out. Small interactions can sometimes bridge the gap.",
-    "reflection": "What is one quality you appreciate about yourself that you would eventually like to share with a new friend?"
+  {
+    "id": 6,
+    "keywords": ["people", "social", "crowd", "party", "meeting", "judgment", "judge"],
+    "emotion": "anxiety",
+    "response": "Social anxiety makes us feel like we're under a spotlight and everyone is judging our mistakes. In reality, most people are focused on their own insecurities.",
+    "suggestion": "Focus outward: instead of monitoring your own breathing or words, observe the color of the room, or listen closely to what someone is saying.",
+    "reflection": "If a friend made a small slip-up in a conversation, would you judge them as harshly as you judge yourself?"
   },
-  "guilt": {
-    "response": "Guilt can feel like a heavy anchor. It often stems from a place of high standards and a kind heart. Let's look at whether this burden is truly yours to carry.",
-    "suggestion": "Try the 'Compassionate Friend' exercise: Write down what you're guilty about, then imagine a wise, kind person reading it. What would they say to comfort you?",
-    "reflection": "Are you judging your past self based on information you only have now in the present?"
+  {
+    "id": 7,
+    "keywords": ["loss", "grief", "death", "passed away", "lost"],
+    "emotion": "sadness",
+    "response": "I am so deeply sorry for your loss. Grief is a heavy, unpredictable wave, and there is no correct way or timeline to heal. Allow yourself to feel whatever comes up.",
+    "suggestion": "Find a comforting physical object (a blanket, a warm cup) and hold it. Let yourself cry or rest without placing any expectations on yourself.",
+    "reflection": "What is a fond memory of who or what you lost that you can carry with you today?"
   },
-  "default": {
-    "response": "I'm here to listen and support you. Your thoughts and feelings matter, and sharing them is a courageous first step toward feeling better.",
-    "suggestion": "Let's start with a grounding breath. Inhale deeply through your nose, and exhale slowly through your mouth. How does your body feel in this moment?",
-    "reflection": "If we were to focus on just one part of what's on your mind today, which part feels the most important to talk about?"
+  {
+    "id": 8,
+    "keywords": ["breakup", "heartbroken", "divorce", "ex", "relationship"],
+    "emotion": "sadness",
+    "response": "Ending a relationship can feel like losing a part of yourself. The pain is a reflection of how deeply you cared, and it is okay to mourn that connection.",
+    "suggestion": "Write a letter to your ex-partner expressing all your pain, anger, and feelings—but do not send it. Rip it up or delete it as a symbolic release.",
+    "reflection": "What are some qualities or activities you put on hold during that relationship that you can start exploring again for yourself?"
+  },
+  {
+    "id": 9,
+    "keywords": ["sad", "depressed", "unhappy", "cry", "gloomy", "low mood", "down"],
+    "emotion": "sadness",
+    "response": "When a low mood sets in, it feels like looking at the world through a dark lens. Please be gentle with yourself; it's okay to not be okay today.",
+    "suggestion": "Commit to a tiny physical movement: stand up, stretch for 30 seconds, or wash your face with warm water. Small changes in physiology can spark a shift.",
+    "reflection": "If your sadness was trying to protect you or tell you that you need rest, what would it say?"
+  },
+  {
+    "id": 10,
+    "keywords": ["hopeless", "pointless", "never get better", "give up"],
+    "emotion": "sadness",
+    "response": "Feeling hopeless is incredibly painful because it tells you that the current pain is permanent. But feelings are temporary states, not permanent realities.",
+    "suggestion": "Focus on getting through just the next hour, rather than the whole week or month. Narrow your horizon to the present moment.",
+    "reflection": "Can you remember a past time when you felt stuck, but things eventually shifted in a way you didn't expect?"
+  },
+  {
+    "id": 11,
+    "keywords": ["mad", "furious", "hate", "irritated", "pissed", "annoyed", "them", "him", "her", "someone"],
+    "emotion": "anger",
+    "response": "It is incredibly frustrating when someone treats us unfairly or ignores our boundaries. Your anger is a valid signal that something feels wrong.",
+    "suggestion": "Try 'Expressive Writing': write down everything you want to scream at them, with no filter. Do this for 5 minutes, then destroy the paper.",
+    "reflection": "What boundary of yours was crossed, and what is the healthiest way you can communicate or protect that boundary in the future?"
+  },
+  {
+    "id": 12,
+    "keywords": ["angry at myself", "screw up", "fail", "stupid", "idiot"],
+    "emotion": "anger",
+    "response": "Being angry at yourself is exhausting because the critic and the victim are the same person. You are human, and making mistakes is how we learn.",
+    "suggestion": "Speak to yourself in the second person as if you were comforting a friend who made the exact same mistake (e.g. 'It's okay, you did your best').",
+    "reflection": "If you look back at this mistake in one year, will it still hold the same weight as it does right now?"
+  },
+  {
+    "id": 13,
+    "keywords": ["tired", "sleepy", "exhausted", "no energy", "sleep-deprived"],
+    "emotion": "fatigue",
+    "response": "When your body is physically exhausted, your mind becomes highly vulnerable to negative thoughts. Fatigue is a physical signal that you need to recharge.",
+    "suggestion": "Do a 'Digital Sunset': turn off your phone, close your eyes, and lie down in a dark room for 15 minutes, even if you don't fall asleep.",
+    "reflection": "How can you adjust your schedule tonight to prioritize deep, uninterrupted sleep?"
+  },
+  {
+    "id": 14,
+    "keywords": ["burnt out", "drained", "lethargic", "sluggish", "wiped out"],
+    "emotion": "fatigue",
+    "response": "Mental burnout is your system's way of saying 'no more'. Trying to push through burnout only extends it. You have run out of fuel.",
+    "suggestion": "Declare a 1-hour 'No-Should' zone. For the next hour, do only what feels restorative, even if it is scrolling, reading, or staring at the ceiling.",
+    "reflection": "What is one activity or responsibility that is draining your battery the most, and how can you set a temporary boundary around it?"
+  },
+  {
+    "id": 15,
+    "keywords": ["lonely", "alone", "isolated", "no one cares", "left out", "unseen"],
+    "emotion": "loneliness",
+    "response": "Feeling lonely even when people are around is a very deep ache. It reminds us that we crave authentic, mutual connection, not just physical proximity.",
+    "suggestion": "Try to share one small, honest detail about how you feel with someone today, rather than keeping up a polite front.",
+    "reflection": "What is one thing you can do to be a warm, comforting companion to yourself tonight?"
+  },
+  {
+    "id": 16,
+    "keywords": ["no one to talk to", "isolated", "disconnected", "empty"],
+    "emotion": "loneliness",
+    "response": "Isolation can make our thoughts feel very loud and distorted. Please know that your current state of isolation is not a reflection of your worth or capability to be loved.",
+    "suggestion": "Reach out to an old acquaintance or check out an online interest community. Alternatively, listen to a comforting podcast or audiobook to hear friendly voices.",
+    "reflection": "If you could connect with a new friend, what values or hobbies would you want to share with them?"
+  },
+  {
+    "id": 17,
+    "keywords": ["guilty", "regret", "should have", "my fault", "blame myself", "remorse"],
+    "emotion": "guilt",
+    "response": "Guilt is a painful weight, but it shows that you have a strong conscience and care about the impact of your actions. However, punishing yourself forever doesn't fix the past.",
+    "suggestion": "Write down the mistake. Next to it, write down what you would do differently today. Formulate a small, actionable step to make amends if possible.",
+    "reflection": "Are you holding your past self to standard of knowledge or maturity that you only developed after making the mistake?"
+  },
+  {
+    "id": 18,
+    "keywords": ["shame", "unworthy", "bad person", "not good enough"],
+    "emotion": "guilt",
+    "response": "Shame tells us that we are bad, whereas guilt tells us we did something bad. You are not a bad person; you are a person who is growing and learning through errors.",
+    "suggestion": "Practice the 'Compassionate Friend' exercise: imagine someone who loves you unconditionally looking at you right now. What gentle words would they speak?",
+    "reflection": "Where did you learn the rule that you have to be perfect to be worthy of love and respect?"
+  },
+  {
+    "id": 19,
+    "keywords": ["hello", "hi", "hey", "welcome", "start", "help"],
+    "emotion": "default",
+    "response": "Hello! Welcome to DeepHeal. I am your AI mental wellness companion, here to listen, support, and help you practice Cognitive Behavioral Therapy (CBT).",
+    "suggestion": "Tell me how you are feeling today, or what's currently on your mind. You can describe any emotions or worries you are carrying.",
+    "reflection": "What is your main goal for our session today? Is it to vent, find a solution, or practice a coping exercise?"
+  },
+  {
+    "id": 20,
+    "keywords": ["ok", "thanks", "thank you", "yes", "no", "fine", "good", "chatbot", "bot"],
+    "emotion": "default",
+    "response": "I appreciate you sharing that. Every step you take, no matter how small, is part of your wellness journey. I'm here whenever you're ready to share more.",
+    "suggestion": "If you're feeling okay, we can do a quick check-in or a 2-minute mindfulness breathing exercise together.",
+    "reflection": "How are you feeling in your body right now? Is there any tension in your shoulders or jaw?"
   }
-}
+]

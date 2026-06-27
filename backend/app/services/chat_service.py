@@ -29,7 +29,7 @@ class ChatService:
         self.memory_service.add_message(user_id, message)
         
         if not response_data:
-            response_data = self.cbt_service.get_structured_response(emotion)
+            response_data = self.cbt_service.get_structured_response(emotion, message)
         
         # 5. Format final response
         return ChatResponse(

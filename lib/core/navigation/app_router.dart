@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../data/models/app_models.dart';
 import '../../features/auth/presentation/screens/splash_screen.dart';
 import '../../features/auth/presentation/screens/onboarding_screen.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
@@ -14,7 +14,7 @@ import '../../features/navigation/main_navigation.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/splash',
-  routes: [
+  routes: <RouteBase>[
     GoRoute(
       path: '/splash',
       builder: (context, state) => const SplashScreen(),

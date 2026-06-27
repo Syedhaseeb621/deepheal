@@ -14,7 +14,8 @@ final authProvider = NotifierProvider<AuthNotifier, UserModel?>(() {
 });
 
 class AuthNotifier extends Notifier<UserModel?> {
-  static const String _userIdKey = 'persistent_user_id';
+  static const String _loggedInUserIdKey = 'logged_in_user_id';
+  static const String _registeredUsersKey = 'registered_users';
 
   @override
   UserModel? build() {
@@ -25,24 +26,40 @@ class AuthNotifier extends Notifier<UserModel?> {
   Future<void> _initializeUser() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      String? userId = prefs.getString(_userIdKey);
-      
-      if (userId == null) {
-        userId = 'user_${DateTime.now().millisecondsSinceEpoch}';
-        await prefs.setString(_userIdKey, userId);
-      }
-      
-      state = UserModel(
-        id: userId,
-        name: 'Sarah Mitchell', // Mock name for now
-        email: 'sarah@example.com',
-        mood: 'Calm',
+      final loggedInUserId = prefs.getString(_loggedInUserIdKey);
+      if (loggedInUserId == null) return;
+
+      // Load the registered users array and find the logged-in user
+      final usersJsonString = prefs.getString(_registeredUsersKey) ?? '[]';
+      final List<dynamic> usersList = jsonDecode(usersJsonString);
+
+      final userMap = usersList.firstWhere(
+        (u) => u['id'] == loggedInUserId,
+        orElse: () => null,
       );
+
+      if (userMap != null) {
+        state = UserModel(
+          id: userMap['id'],
+          name: userMap['name'] ?? 'User',
+          email: userMap['email'] ?? '',
+          mood: 'Calm',
+        );
+      }
     } catch (_) {}
   }
 
   void setUser(UserModel? user) => state = user;
+
+  Future<void> logout() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove(_loggedInUserIdKey);
+    } catch (_) {}
+    state = null;
+  }
 }
+
 
 // Navigation Drawer / Bottom Nav Provider
 final navIndexProvider = NotifierProvider<NavIndexNotifier, int>(() {

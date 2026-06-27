@@ -3,7 +3,7 @@ import '../../core/theme/app_colors.dart';
 
 class AppButton extends StatelessWidget {
   final String text;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final bool isLoading;
   final bool isSecondary;
   final IconData? icon;
@@ -12,7 +12,7 @@ class AppButton extends StatelessWidget {
   const AppButton({
     super.key,
     required this.text,
-    required this.onPressed,
+    this.onPressed,
     this.isLoading = false,
     this.isSecondary = false,
     this.icon,
@@ -30,7 +30,7 @@ class AppButton extends StatelessWidget {
         gradient: gradient ?? (isSecondary ? null : AppColors.primaryGradient),
         boxShadow: isSecondary ? null : [
           BoxShadow(
-            color: AppColors.primary.withOpacity(0.3),
+            color: AppColors.primary.withValues(alpha: 0.3),
             blurRadius: 15,
             spreadRadius: -2,
             offset: const Offset(0, 8),
@@ -41,6 +41,7 @@ class AppButton extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: isLoading ? null : onPressed,
+          // onPressed == null signals a disabled state
           borderRadius: BorderRadius.circular(20),
           child: Center(
             child: isLoading

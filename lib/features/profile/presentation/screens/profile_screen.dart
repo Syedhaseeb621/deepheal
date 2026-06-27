@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/providers/app_providers.dart';
 import '../../../../shared/widgets/glass_card.dart';
@@ -35,13 +36,17 @@ class ProfileScreen extends ConsumerWidget {
       }
     }
 
+    final user = ref.watch(authProvider);
+    final userName = user?.name ?? 'User';
+    final userEmail = user?.email ?? '';
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
           child: Column(
             children: [
-              _buildProfileHeader(),
+              _buildProfileHeader(userName, userEmail),
               const SizedBox(height: 40),
               _buildStatsSection(totalSessions, streak, latestMood),
               const SizedBox(height: 40),
@@ -56,7 +61,7 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildProfileHeader() {
+  Widget _buildProfileHeader(String name, String email) {
     return Column(
       children: [
         Stack(
@@ -65,9 +70,17 @@ class ProfileScreen extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(4),
               decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle),
-              child: const CircleAvatar(
+              child: CircleAvatar(
                 radius: 60,
-                backgroundImage: NetworkImage('https://i.pravatar.cc/300?img=5'), // Mock image
+                backgroundColor: AppColors.primaryLight,
+                child: Text(
+                  name.isNotEmpty ? name[0].toUpperCase() : 'U',
+                  style: const TextStyle(
+                    fontSize: 48,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primary,
+                  ),
+                ),
               ),
             ),
             Container(
@@ -78,14 +91,14 @@ class ProfileScreen extends ConsumerWidget {
           ],
         ).animate().scale(duration: 600.ms, curve: Curves.easeOutBack),
         const SizedBox(height: 20),
-        const Text(
-          'Sarah Mitchell',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        Text(
+          name,
+          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 4),
         Text(
-          'sarah@example.com',
-          style: TextStyle(color: AppColors.textSecondary, fontSize: 16),
+          email,
+          style: const TextStyle(color: AppColors.textSecondary, fontSize: 16),
         ),
       ],
     );
@@ -157,7 +170,7 @@ class ProfileScreen extends ConsumerWidget {
             Switch(
               value: value,
               onChanged: onChanged,
-              activeColor: AppColors.primary,
+              activeThumbColor: AppColors.primary,
             ),
           ],
         ),
@@ -184,9 +197,10 @@ class ProfileScreen extends ConsumerWidget {
 
   Widget _buildLogoutButton(BuildContext context, WidgetRef ref) {
     return TextButton(
-      onPressed: () {
+      onPressed: () async {
+        await ref.read(authProvider.notifier).logout();
         ref.read(chatProvider.notifier).clearHistory();
-        context.go('/login');
+        if (context.mounted) context.go('/login');
       },
       child: const Text(
         'Logout',

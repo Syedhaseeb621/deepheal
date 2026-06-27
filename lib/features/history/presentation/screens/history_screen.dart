@@ -28,11 +28,11 @@ class HistoryScreen extends ConsumerWidget {
               const SizedBox(height: 30),
               _buildSectionTitle('Emotion Analysis Logs'),
               const SizedBox(height: 16),
-              ...emotions.map((e) => _buildEmotionHistoryItem(e)).toList(),
+              ...emotions.map((e) => _buildEmotionHistoryItem(e)),
               const SizedBox(height: 40),
               _buildSectionTitle('Therapy Sessions'),
               const SizedBox(height: 16),
-              ...sessions.map((s) => _buildTherapyHistoryItem(s)).toList(),
+              ...sessions.map((s) => _buildTherapyHistoryItem(s)),
               const SizedBox(height: 100),
             ],
           ),
@@ -57,7 +57,7 @@ class HistoryScreen extends ConsumerWidget {
           children: [
             Container(
               padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(color: emotion.color.withOpacity(0.1), shape: BoxShape.circle),
+              decoration: BoxDecoration(color: emotion.color.withValues(alpha: 0.1), shape: BoxShape.circle),
               child: Icon(Icons.sentiment_satisfied_rounded, color: emotion.color),
             ),
             const SizedBox(width: 16),
@@ -91,7 +91,7 @@ class HistoryScreen extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: (isJournal ? AppColors.primary : AppColors.teal).withOpacity(0.1),
+                color: (isJournal ? AppColors.primary : AppColors.teal).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(isJournal ? Icons.edit_note_rounded : Icons.air_rounded, color: isJournal ? AppColors.primary : AppColors.teal),

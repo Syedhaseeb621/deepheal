@@ -32,20 +32,20 @@ class AppTextField extends StatelessWidget {
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           decoration: InputDecoration(
             hintText: hintText,
-            hintStyle: TextStyle(color: AppColors.textDisabled.withOpacity(0.8)),
+            hintStyle: TextStyle(color: AppColors.textDisabled.withValues(alpha: 0.8)),
             prefixIcon: prefixIcon != null 
-              ? Icon(prefixIcon, color: AppColors.primary.withOpacity(0.8), size: 22)
+              ? Icon(prefixIcon, color: AppColors.primary.withValues(alpha: 0.8), size: 22)
               : null,
             contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
             filled: true,
-            fillColor: AppColors.background.withOpacity(0.5),
+            fillColor: AppColors.background.withValues(alpha: 0.5),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: Colors.black.withOpacity(0.05)),
+              borderSide: BorderSide(color: Colors.black.withValues(alpha: 0.05)),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: Colors.black.withOpacity(0.05)),
+              borderSide: BorderSide(color: Colors.black.withValues(alpha: 0.05)),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),

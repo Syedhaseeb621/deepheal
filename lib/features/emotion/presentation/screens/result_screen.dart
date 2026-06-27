@@ -27,7 +27,7 @@ class ResultScreen extends StatelessWidget {
         width: double.infinity,
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [themeColor.withOpacity(0.05), AppColors.purple.withOpacity(0.05)],
+            colors: [themeColor.withValues(alpha: 0.05), AppColors.purple.withValues(alpha: 0.05)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -96,7 +96,7 @@ class ResultScreen extends StatelessWidget {
             color: Colors.white,
             shape: BoxShape.circle,
             boxShadow: [
-              BoxShadow(color: color.withOpacity(0.3), blurRadius: 40, spreadRadius: 10),
+              BoxShadow(color: color.withValues(alpha: 0.3), blurRadius: 40, spreadRadius: 10),
             ],
           ),
           child: Center(
@@ -119,7 +119,7 @@ class ResultScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _buildScoreItem('Confidence', confidence, AppColors.primary),
-          Container(width: 1, height: 40, color: AppColors.textDisabled.withOpacity(0.2)),
+          Container(width: 1, height: 40, color: AppColors.textDisabled.withValues(alpha: 0.2)),
           _buildScoreItem('Stability', 'High', color),
         ],
       ),
@@ -165,22 +165,23 @@ class ResultScreen extends StatelessWidget {
             Icons.self_improvement_rounded,
             color,
           ),
-        )).toList(),
+        )),
       ],
     ).animate().fadeIn(delay: 1100.ms).slideY(begin: 0.1, end: 0);
   }
+
 
   Widget _buildSuggestionCard(BuildContext context, String title, String desc, IconData icon, Color color) {
     return GestureDetector(
       onTap: () => context.push('/therapy'),
       child: GlassCard(
         padding: const EdgeInsets.all(16),
-        color: color.withOpacity(0.05),
+        color: color.withValues(alpha: 0.05),
         child: Row(
           children: [
             Container(
               padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(12)),
+              decoration: BoxDecoration(color: color.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(12)),
               child: Icon(icon, color: color),
             ),
             const SizedBox(width: 16),

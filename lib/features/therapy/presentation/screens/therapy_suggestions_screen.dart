@@ -76,7 +76,7 @@ class TherapySuggestionsScreen extends StatelessWidget {
       onTap: onTap,
       child: GlassCard(
         padding: const EdgeInsets.all(24),
-        color: color.withOpacity(0.05),
+        color: color.withValues(alpha: 0.05),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -85,7 +85,7 @@ class TherapySuggestionsScreen extends StatelessWidget {
               children: [
                 Container(
                   padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(16)),
+                  decoration: BoxDecoration(color: color.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(16)),
                   child: Icon(icon, color: color, size: 30),
                 ),
                 Container(
@@ -168,7 +168,7 @@ class _BreathingExerciseScreenState extends State<BreathingExerciseScreen> {
                   width: 200,
                   height: 200,
                   decoration: BoxDecoration(
-                    color: AppColors.teal.withOpacity(0.1),
+                    color: AppColors.teal.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
                 )
@@ -237,7 +237,7 @@ class JournalingScreen extends StatelessWidget {
               decoration: InputDecoration(
                 hintText: 'Start writing...',
                 filled: true,
-                fillColor: AppColors.primary.withOpacity(0.05),
+                fillColor: AppColors.primary.withValues(alpha: 0.05),
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(20), borderSide: BorderSide.none),
               ),
             ),

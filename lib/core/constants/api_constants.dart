@@ -4,10 +4,10 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 class ApiConstants {
   // Automatically switches between 187.77.14.62:5000 (VPS Web) and local dev environments
   static String get baseUrl {
-    if (kIsWeb) return "http://187.77.14.62:5000";
+    if (kIsWeb) return "http://187.77.14.62:8000";
     if (Platform.isAndroid) {
       // Point to VPS backend for APK/devices. Change to "http://10.0.2.2:8000" if using local emulator.
-      return "http://187.77.14.62:5000";
+      return "http://187.77.14.62:8000";
     }
     return "http://127.0.0.1:8000";
   }
